@@ -27,11 +27,11 @@ const userSchema = new mongoose.Schema({
 });
 
 // static signup method
-userSchema.statics.signup = async function(name,email, password) {
+userSchema.statics.signup = async function(name,email, password,role) {
 
     // validation
-    if(!email || !password || !name){
-        throw Error("Email, password and name are required")
+    if(!email || !password || !name || !role){
+        throw Error("Email, password, name and role are required")
     }
     if(!validator.isEmail(email)){
         throw Error("Email is invalid")
@@ -46,7 +46,7 @@ userSchema.statics.signup = async function(name,email, password) {
     }
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
-    const user=await this.create({name,email,password:hashedPassword})
+    const user=await this.create({name,email,password:hashedPassword,role})
     return user
 
 
